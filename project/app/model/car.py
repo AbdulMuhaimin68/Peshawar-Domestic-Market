@@ -11,6 +11,6 @@ class Car(db.Model):
     car_description = db.Column(db.String(500), nullable=False)
     image_url = db.Column(db.String(255), nullable=True)
     
-    user_id = db.Column(db.Integer, db.ForeignKey("user.user_id"), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.user_id"))
     user = db.relationship("User", back_populates="car")
     contact = db.relationship("Contact", back_populates="car")

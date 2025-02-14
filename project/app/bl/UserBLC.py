@@ -17,3 +17,22 @@ class UserBLC:
         except Exception as e:
             session.rollback()
             raise e
+    
+    @staticmethod
+    def fetch_user_by_id(args):
+        id = args.get("id")  
+        session = UserRepository.get_session()
+        try:
+            result = UserRepository.get_user(session,id)
+            return result
+        except Exception as e:
+            raise e
+        
+    @staticmethod
+    def get_all_users():
+        session = UserRepository.get_session()
+        try:
+            result = UserRepository.get_all_users(session)
+            return result
+        except Exception as e:
+            raise e

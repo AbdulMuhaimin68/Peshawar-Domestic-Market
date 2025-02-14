@@ -8,7 +8,7 @@ class Blog(db.Model):
     content = db.Column(db.String(500), nullable=False)
     image_url = db.Column(db.String(255), nullable=True)
     
-    user_id = db.Column(db.Integer, db.ForeignKey("user.user_id"), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.user_id"))
     user = db.relationship("User", back_populates="blog")
     
     comment = db.relationship("Comment", back_populates="blog")

@@ -32,3 +32,20 @@ class UserRepository:
         except Exception as e:
             session.rollback()
             raise e
+        
+    @staticmethod
+    def get_user(session: scoped_session, id):  # Also renamed
+        if not id:
+            return {"error": "ID is required"}
+        res = session.query(User).filter(User.user_id == id).first()
+        return res
+
+    @staticmethod
+    def get_all_users(session: scoped_session):
+        try:
+            query = session.query(User)  # Start with a base query
+            users = query.all()
+            return users
+        except Exception as e:
+            raise e
+

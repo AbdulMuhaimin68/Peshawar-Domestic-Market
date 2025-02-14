@@ -5,6 +5,10 @@ from flask import Flask,jsonify
 from datetime import timedelta
 from project.app.db import db
 from project.blueprint.User import bp as user_bp
+from project.blueprint.Car import bp as car_bp
+from project.blueprint.Blogs import bp as blog_bp
+from project.blueprint.Contact import bp as contact_bp
+from project.blueprint.Comment import bp as comment_bp
 # from project import config
 
 # from project.blueprint.employee import bp as employee_bp
@@ -52,7 +56,12 @@ def create_app():
         
     # app.register_blueprint(employee_bp)
     app.register_blueprint(user_bp)
+    app.register_blueprint(car_bp)
+    app.register_blueprint(blog_bp)
+    app.register_blueprint(contact_bp)
+    app.register_blueprint(comment_bp)
     # app.register_blueprint(posts_bp)
+  
     with app.app_context():
         db.create_all()
 

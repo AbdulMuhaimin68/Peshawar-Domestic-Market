@@ -8,8 +8,8 @@ class Contact(db.Model):
     contact_id = db.Column(db.Integer, primary_key=True)
     message = db.Column(db.String(500), nullable=False)
     
-    user_id = db.Column(db.Integer, db.ForeignKey("user.user_id"), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.user_id"))
     user = db.relationship("User", back_populates="contact")
 
-    car_id = db.Column(db.Integer, db.ForeignKey("car.car_id"), nullable=False)
+    car_id = db.Column(db.Integer, db.ForeignKey("car.car_id"))
     car = db.relationship("Car", back_populates="contact")
