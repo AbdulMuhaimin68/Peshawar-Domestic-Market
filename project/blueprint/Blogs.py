@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify
-from project.app.schemas.BlogSchema import BlogSchema, GetAllBlogs
+from project.app.schemas.BlogSchema import BlogSchema, GetAllBlogs, UpdateCarDetailsById
 from webargs.flaskparser import use_args
 from project.app.bl.BlogBLC import BlogBLC
 from marshmallow import fields
@@ -37,3 +37,11 @@ def get_all_blogs(args):
             return jsonify({"message": "All the blogs info", "result": result}), 200
         else:
             return jsonify({"error": "No blogs found!"}), 404 
+
+@bp.route("/blogs", methods=['PUT'])
+@use_args(UpdateCarDetailsById(), location='json')
+def update_blog_details(args):
+    try:
+        return BlogBLC.update_blog_by_id(args)  # ✅ Call the correct function
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500

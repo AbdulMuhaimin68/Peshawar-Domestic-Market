@@ -35,4 +35,11 @@ class BlogRepository:
             return blogs
         except Exception as e:
             raise e
-            
+    
+    @staticmethod
+    def updated_blog(blog, args:dict):
+        blog.title = args.get("title", blog.title)
+        blog.content = args.get("content", blog.content)
+        blog.image_url = args.get("image_url", blog.image_url)
+        
+        return blog

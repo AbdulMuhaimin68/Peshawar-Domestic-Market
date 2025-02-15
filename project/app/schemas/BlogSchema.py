@@ -10,3 +10,6 @@ class BlogSchema(Schema):
     
 class GetAllBlogs(BlogSchema):
     pass
+
+class UpdateCarDetailsById(BlogSchema):
+    blog_id = fields.Integer(required = True)

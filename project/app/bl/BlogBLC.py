@@ -39,3 +39,19 @@ class BlogBLC:
             return res
         except Exception as e:
             raise e
+        
+    @staticmethod
+    def update_blog_by_id(args:dict):
+        session = BlogRepository.get_session()
+        try:
+            blog = BlogRepository.get_Blog_by_id(session, args.get("blog_id"))
+            
+            result = BlogRepository.updated_blog(blog, args)
+            session.add(result)
+            session.commit()
+            schema = BlogSchema()
+            res = schema.dump(result)
+            
+            return jsonify({"message" : "blogs details updated" , "result" : res}),201
+        except Exception as e:
+            return jsonify({"error" : str(e)}),500
