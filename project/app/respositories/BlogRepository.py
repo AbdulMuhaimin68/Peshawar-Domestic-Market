@@ -1,6 +1,7 @@
 from project.app.db import db
 from project.app.model.blog import Blog
 from sqlalchemy.orm import scoped_session
+from flask import jsonify
 
 class BlogRepository:
     
@@ -43,3 +44,29 @@ class BlogRepository:
         blog.image_url = args.get("image_url", blog.image_url)
         
         return blog
+    
+    @staticmethod
+    def delete_blog(args:dict, session:scoped_session):
+        id = args.get("blog_id")
+        
+        try:
+            result = session.query(Blog).filter(Blog.blog_id == id).first()
+            if result is None:
+                return {"error!" : f"Blog with {id} not found!"}
+            
+            blog_deleted = {
+                "blog_id" : result.blog_id,
+                "title" : result.title,
+                "content" : result.content,
+                "image_url" : result.image_url
+            }
+            
+            session.delete(result)
+            session.commit()
+            session.flush()
+            
+            return blog_deleted
+        except Exception as e:
+            session.rollback()
+            raise e
+            

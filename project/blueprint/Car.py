@@ -61,8 +61,8 @@ def delete_car_details(args):
         res = CarBLC.delet_car_details_by_id(args)
 
         if "error" in res:
-            return jsonify(res), 500  # If error exists, return with status 500
+            return jsonify(res), 500  
 
-        return jsonify({"Message": "Car details removed", "result": res}), 201  # ✅ No nested jsonify()
+        return jsonify({"Message": "Car details removed", "result": res}), 201 
     except Exception as e:
         return jsonify({"error": str(e)}), 500

@@ -55,3 +55,16 @@ class BlogBLC:
             return jsonify({"message" : "blogs details updated" , "result" : res}),201
         except Exception as e:
             return jsonify({"error" : str(e)}),500
+        
+    @staticmethod
+    def delete_blog_by_id(args:dict):
+        session = BlogRepository.get_session()
+        try:
+            
+            blog = BlogRepository.delete_blog(args, session)
+            if blog:
+                return blog
+            else:
+                return {"message" : "Blog not found"}
+        except Exception as e:
+            return {"error!" : str(e)}

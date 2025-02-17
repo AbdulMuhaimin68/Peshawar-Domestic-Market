@@ -13,3 +13,6 @@ class GetAllBlogs(BlogSchema):
 
 class UpdateCarDetailsById(BlogSchema):
     blog_id = fields.Integer(required = True)
+    
+class DeleteBlogById(BlogSchema):
+    blog_id = fields.Integer(required = True)

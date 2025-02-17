@@ -1,8 +1,9 @@
 from flask import Blueprint, jsonify
-from project.app.schemas.BlogSchema import BlogSchema, GetAllBlogs, UpdateCarDetailsById
+from project.app.schemas.BlogSchema import BlogSchema, GetAllBlogs, UpdateCarDetailsById, DeleteBlogById
 from webargs.flaskparser import use_args
 from project.app.bl.BlogBLC import BlogBLC
 from marshmallow import fields
+from http import HTTPStatus
 
 
 bp = Blueprint('blogs', __name__)
@@ -42,6 +43,15 @@ def get_all_blogs(args):
 @use_args(UpdateCarDetailsById(), location='json')
 def update_blog_details(args):
     try:
-        return BlogBLC.update_blog_by_id(args)  # ✅ Call the correct function
+        return BlogBLC.update_blog_by_id(args)  
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+
+@bp.route("/blogs", methods = ['DELETE'])
+@use_args({"blog_id" : fields.Int()}, location="json")
+def delete_blog(args):
+    try:
+        return BlogBLC.delete_blog_by_id(args)
+    except Exception as e:
+        return jsonify({"error!" : str(e)}), 404
