@@ -58,7 +58,7 @@ def update_user(args):
     
     
 @bp.route("/user", methods=['DELETE'])
-@use_args(GetUserById(), location='json')  # Using the correct schema that only expects `user_id`
+@use_args(GetUserById(), location='json')  
 def delete_user(args):
     try:
         res = UserBLC.deleted_user_by_id(args)
