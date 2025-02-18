@@ -3,6 +3,7 @@ from project.app.db import db
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import scoped_session
 from werkzeug.security import generate_password_hash
+from project.app.schemas.UserSchema import UserSchema
 
 class UserRepository:
     
@@ -34,18 +35,44 @@ class UserRepository:
             raise e
         
     @staticmethod
-    def get_user(session: scoped_session, id):  # Also renamed
-        if not id:
-            return {"error": "ID is required"}
-        res = session.query(User).filter(User.user_id == id).first()
-        return res
+    def get_user(user_id: int, session):
+        # Make sure you're calling query on session, not on user_id
+        return session.query(User).filter(User.user_id == user_id).first()
 
     @staticmethod
     def get_all_users(session: scoped_session):
         try:
-            query = session.query(User)  # Start with a base query
+            query = session.query(User)  
             users = query.all()
             return users
         except Exception as e:
+            raise e
+
+
+    @staticmethod
+    def update_user_details(user, args:dict):
+        user.username = args.get("username", user.username)
+        user.email = args.get("email", user.email)
+        if args.get("password"):
+            user.password = generate_password_hash(args["password"])
+        user.role = args.get("role", user.role)
+        
+        return user
+    
+    @staticmethod
+    def delete_user_by_id(args, session: scoped_session):
+        user_id = args.get("user_id")
+        try:
+            user = session.query(User).filter(User.user_id == user_id).first()
+            
+            if not user:
+                return None
+            deleted_user = UserSchema().dump(user)
+            session.delete(user)
+            session.commit()
+            
+            return deleted_user
+        except Exception as e:
+            session.rollback() 
             raise e
 

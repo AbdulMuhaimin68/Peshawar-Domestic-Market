@@ -47,7 +47,7 @@ def get_car_by_id(args):
 def update_cars(args):
     try:
         res = CarBLC.update_car_details_by_id(args)
-        print(type(res))  # Debugging: Check the type
+        print(type(res))  
         results = dict(res)
         return jsonify({"message": "Car details updated successfully!", "results": results}), 201
     except Exception as e:

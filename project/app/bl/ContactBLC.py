@@ -15,3 +15,25 @@ class ContactBLC:
         except Exception as e:
             session.rollback()
             raise e
+        
+    @staticmethod
+    def get_contact_by_id(contact_id: int):
+        session = ContactRepository.get_session()
+        try:
+            contact = ContactRepository.get_contact_by_id(contact_id, session)  
+            schema = ContactSchema()
+            result = schema.dump(contact)
+            return result
+        except Exception as e:
+            raise e
+
+
+    @staticmethod
+    def get_all_contacts():
+        session = ContactRepository.get_session()
+        try:
+            contact = ContactRepository.get_all_contacts(session)
+            return contact
+        except Exception as e:
+            return {"error" : str(e)}
+            

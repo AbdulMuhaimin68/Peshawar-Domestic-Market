@@ -18,15 +18,15 @@ class CommentBLC:
     @staticmethod  
     def get_comments_by_id(args: dict):
         session = CommentRepository.get_session()
-        comment_id = args.get("comment_id")  # Extract integer ID
+        comment_id = args.get("comment_id")  
 
         if not comment_id:
             return {"error": "Comment ID is required"}
 
         try:
-            comment = CommentRepository.get_comment_by_id(comment_id, session)  # Pass integer only
+            comment = CommentRepository.get_comment_by_id(comment_id, session)  
             if not comment:
-                return None  # Ensures the route properly handles 404
+                return None  
             return CommentSchema().dump(comment)
         except Exception as e:
             return {"error": str(e)}
@@ -36,7 +36,7 @@ class CommentBLC:
         session = CommentRepository.get_session()
         try:
             comments = CommentRepository.get_all_comments(session)
-            return comments  # ✅ Fix: Now correctly returns `Comment` objects
+            return comments  
         except Exception as e:
             return {"error": str(e)}
 

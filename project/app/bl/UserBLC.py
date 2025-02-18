@@ -36,3 +36,36 @@ class UserBLC:
             return result
         except Exception as e:
             raise e
+
+
+    @staticmethod
+    def update_user_by_id(args: dict):
+        session = UserRepository.get_session()
+        try:
+            user = UserRepository.get_user(args.get('user_id'), session)  
+            if not user:
+                return {"error!" : "User id not found!"}
+            
+            updated_user = UserRepository.update_user_details(user, args)
+            session.commit()
+            
+            schema = UserSchema()
+            result = schema.dump(updated_user)
+            
+            return {"message" : "user updated successfully!", "result" : result}
+        except Exception as e:
+            session.rollback()
+            return {"error!" : str(e)}
+        
+    @staticmethod
+    def deleted_user_by_id(args):
+        session = UserRepository.get_session()
+        try:
+            res = UserRepository.delete_user_by_id(args, session)
+            if res:
+                return {"message": "User deleted successfully", "result": res}
+            else:
+                return {"message": "User with this id not found!"}
+        except Exception as e:
+            return {"error!": str(e)}
+

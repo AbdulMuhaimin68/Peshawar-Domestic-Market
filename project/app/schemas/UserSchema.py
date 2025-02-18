@@ -14,7 +14,7 @@ class UserSchema(Schema):
     #     if not value and value.strip() == "":
     #         raise ValidationError("Password cannot be empty.")
         
-class GetUserById(UserSchema):
+class GetUserById(Schema):
     user_id = fields.Integer(required=True)
 
 class GetAllUserSchema(UserSchema):  # Don't inherit UserSchema

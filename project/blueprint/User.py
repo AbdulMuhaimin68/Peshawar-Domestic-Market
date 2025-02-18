@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify
 from project.app.bl.UserBLC import UserBLC
-from project.app.schemas.UserSchema import UserSchema, GetAllUserSchema
+from project.app.schemas.UserSchema import UserSchema, GetAllUserSchema, GetUserById
 from webargs.flaskparser import use_args, parser
 from marshmallow import fields
 from marshmallow import ValidationError
@@ -46,3 +46,25 @@ def get_user(args):
     
         
         
+@bp.route("/user", methods = ['PUT'])
+@use_args(GetUserById(), location='json')
+def update_user(args):
+    try:
+        res = UserBLC.update_user_by_id(args)
+        if res:
+            return jsonify({"message" : "user updated successfully!", "result" : res}),200
+    except Exception as e:
+        return jsonify({"message" : str(e)}),404
+    
+    
+@bp.route("/user", methods=['DELETE'])
+@use_args(GetUserById(), location='json')  # Using the correct schema that only expects `user_id`
+def delete_user(args):
+    try:
+        res = UserBLC.deleted_user_by_id(args)
+        if "error!" in res:
+            return jsonify(res), 404
+        return jsonify(res), 200
+    except Exception as e:
+        return jsonify({"error!": str(e)}), 500
+
