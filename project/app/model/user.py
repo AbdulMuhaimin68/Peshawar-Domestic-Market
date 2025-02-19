@@ -17,7 +17,7 @@ class User(db.Model):
     comment = db.relationship("Comment", back_populates="user")
     
     def set_password(self, password):
-        self.user_password = generate_password_hash(password)
+        self.password = generate_password_hash(password)
         
     def check_password(self, password):
-        return check_password_hash(self.user_password, password)
+        return check_password_hash(self.password, password)

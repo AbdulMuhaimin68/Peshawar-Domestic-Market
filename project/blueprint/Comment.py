@@ -3,11 +3,13 @@ from flask import Blueprint, jsonify
 from webargs.flaskparser import use_args
 from project.app.bl.CommentBLC import CommentBLC
 from marshmallow import fields
+from flask_jwt_extended import jwt_required
 
 bp = Blueprint('comment', __name__)
 
 @bp.route("/comments", methods = ['POST'])
 @use_args(CommentSchema(), location='json')
+@jwt_required()
 def post_Comment(args):
     try:
         res = CommentBLC.add_comment(args)

@@ -4,12 +4,15 @@ from webargs.flaskparser import use_args
 from project.app.bl.BlogBLC import BlogBLC
 from marshmallow import fields
 from http import HTTPStatus
-
+from flask_jwt_extended import jwt_required
+# from project.app.decorator import admin_required
 
 bp = Blueprint('blogs', __name__)
 
 @bp.route("/blogs", methods = ['POST'])
 @use_args(BlogSchema(), location='json')
+@jwt_required()
+# @admin_required()
 def blog(args):
     try:
         res = BlogBLC.add_blog(args)

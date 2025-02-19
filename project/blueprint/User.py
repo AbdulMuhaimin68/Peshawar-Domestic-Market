@@ -1,6 +1,8 @@
+from sqlite3 import IntegrityError
 from flask import Blueprint, jsonify
 from project.app.bl.UserBLC import UserBLC
-from project.app.schemas.UserSchema import UserSchema, GetAllUserSchema, GetUserById
+from project.app.bl.LoginBLC import LoginBLC
+from project.app.schemas.UserSchema import UserSchema, GetAllUserSchema, GetUserById, LoginSchema
 from webargs.flaskparser import use_args, parser
 from marshmallow import fields
 from marshmallow import ValidationError
@@ -68,3 +70,15 @@ def delete_user(args):
     except Exception as e:
         return jsonify({"error!": str(e)}), 500
 
+
+@bp.route('/login', methods=['POST'])
+@use_args(LoginSchema(), location='json')
+def login(args):    
+    try:
+        result = LoginBLC.login(args)
+        
+        return jsonify({"result":result})
+    except IntegrityError as e:
+        return jsonify({"Error":e.orig.args[1]}), 422
+    except Exception as e:
+        return jsonify(str(e)),422

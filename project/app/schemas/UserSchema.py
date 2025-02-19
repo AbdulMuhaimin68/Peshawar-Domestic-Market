@@ -9,13 +9,22 @@ class UserSchema(Schema):
     password = fields.String(required=True)
     role = fields.String(required=True)
 
-    # @validates("password")
-    # def validate_password(self, value):
-    #     if not value and value.strip() == "":
-    #         raise ValidationError("Password cannot be empty.")
+    @validates("password")
+    def validate_password(self, value):
+        if not value and value.strip() == "":
+            raise ValidationError("Password cannot be empty.")
+        
+    @validates('role')
+    def validate_role(self, value):
+        if value not in ['admin', 'seller', 'buyer']:
+            raise ValidationError('Invalid role. Roles must be admin, seller, or buyer.')
         
 class GetUserById(Schema):
     user_id = fields.Integer(required=True)
 
-class GetAllUserSchema(UserSchema):  # Don't inherit UserSchema
+class GetAllUserSchema(UserSchema):  
     pass
+
+class LoginSchema(Schema):
+    email = fields.Email(required=True)
+    password = fields.String(required=True)
