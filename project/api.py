@@ -31,9 +31,20 @@ def create_app():
         user = User.query.filter(User.email == email).first() 
         return user
         
+    # @jwt.additional_claims_loader
+    # def add_claims(identity):
+        
+    #     return {"role": "admin" if identity == "admin_user" else "user"}
     @jwt.additional_claims_loader
-    def add_claims(identity):
-        return {"role": "admin" if identity == "admin_user" else "user"}
+    def add_claims_to_jwt(identity):
+        
+        user = User.query.filter_by(email=identity).first()  
+        if user:
+            print(f"Fetching User: {user.email}, Role in DB: {user.role}")  # Debugging output
+            return {"role": user.role}  
+        return {}
+
+    
     
     @app.errorhandler(422)
     def webargs_error_handler(err):

@@ -5,25 +5,28 @@ from project.app.bl.BlogBLC import BlogBLC
 from marshmallow import fields
 from http import HTTPStatus
 from flask_jwt_extended import jwt_required
-# from project.app.decorator import admin_required
+from project.app.decorator import admin_required
 
 bp = Blueprint('blogs', __name__)
 
-@bp.route("/blogs", methods = ['POST'])
+@bp.route("/blogs", methods=['POST'])
 @use_args(BlogSchema(), location='json')
-@jwt_required()
-# @admin_required()
+@jwt_required()  
+@admin_required  
 def blog(args):
     try:
         res = BlogBLC.add_blog(args)
-        return jsonify({"message" : "blog added Successfully!", "result" : res}),201
+        return jsonify({"message": "Blog added successfully!", "result": res}), 201
     except Exception as e:
-        return jsonify({"error!" : str(e)})
-    
+        return jsonify({"error": str(e)}), 500  # Return proper error response
+
     
 @bp.route("/blogs", methods=['GET'])
 @use_args({"blog_id": fields.Int()}, location="query")
+@jwt_required()  
+@admin_required 
 def get_all_blogs(args):
+    
     id = args.get("blog_id")
     if id:
         try:

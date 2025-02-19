@@ -17,9 +17,13 @@ class LoginRepository:
         
         user = session.query(User).filter(User.email == email).first()
         
-        if not user and user.check_password(password):
-            # breakpoint()
+        if not user or not user.check_password(password):  # ✅ Fixed logic
             return {"message" : "Invalid email or password"}
         
-        access_token = create_access_token(identity=email, expires_delta=timedelta(days = 30))
+
+        print(f"User logging in: {user.email}, Role: {user.role}")  # Debugging output
+        
+        access_token = create_access_token(identity=user.email, expires_delta=timedelta(days=30))
+        
         return access_token
+
